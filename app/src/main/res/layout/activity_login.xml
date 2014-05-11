@@ -1,0 +1,68 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dip">
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/prompt_email"
+        android:singleLine="true"
+        android:layout_marginBottom="5dip"/>
+
+    <EditText android:id="@+id/txtUsername"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dip"/>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/prompt_password"
+        android:layout_marginBottom="5dip"/>
+
+    <EditText android:id="@+id/txtPassword"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dip"
+        android:password="true"
+        android:singleLine="true"/>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/prompt_portal"
+        android:layout_marginBottom="5dip"/>
+
+    <EditText android:id="@+id/txtPortal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dip"
+        android:singleLine="true"/>
+
+    <Button android:id="@+id/btnLogin"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:onClick="logIn"
+        android:text="@string/action_sign_in_short"/>
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="58dp"
+        android:layout_height="58dp"
+        android:id="@+id/progressBar"
+        android:layout_gravity="center_horizontal"
+        android:indeterminate="false"
+        android:visibility="invisible" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/progressLogin"
+        android:id="@+id/textProgress"
+        android:layout_gravity="center_horizontal"
+        android:visibility="invisible" />
+
+</LinearLayout>

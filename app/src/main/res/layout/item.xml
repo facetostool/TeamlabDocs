@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="#FFF"
+    android:focusableInTouchMode="true">
+
+    <ImageView
+        android:id="@+id/ivImage"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/file_xls"
+        android:scaleType="centerInside"
+        android:padding="1dp">
+
+    </ImageView>
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TeamLab Office Sample Presentation.pptx"
+            android:textSize="16sp"
+            android:singleLine="true"
+            android:textColor="#333"
+            android:textIsSelectable="false">
+        </TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Small Text"
+            android:id="@+id/textDesc"
+            android:singleLine="true"
+            android:textSize="12sp"
+            android:textColor="#787878"
+            android:textIsSelectable="true" />
+
+    </LinearLayout>
+
+</LinearLayout>
