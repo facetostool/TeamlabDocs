@@ -18,7 +18,6 @@
             </intent-filter>
         </activity>
 
-        <!-- DashBoard / MainActivity2 -->
         <activity
             android:name="com.example.teamlabdocsapp.app.LoginActivity"
             android:label="User Login"

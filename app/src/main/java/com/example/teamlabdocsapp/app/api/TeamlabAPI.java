@@ -12,6 +12,8 @@ public class TeamlabAPI {
     private String url;
     private Context context;
 
+    public final static String REQUEST_TYPE = ".json";
+
     public TeamlabAPI(Context context, String portal) {
         this.context = context;
         if (portal.equals("1")) {

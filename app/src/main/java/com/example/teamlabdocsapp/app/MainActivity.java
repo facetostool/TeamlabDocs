@@ -8,6 +8,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -100,8 +101,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void SelectItem(int possition) {
-
-        Fragment fragment = new ContentViewer(this);;
+        Fragment fragment = new ContentViewer(this);
         Bundle args = new Bundle();
         args.putString(ContentViewer.ITEM_NAME, dataList.get(possition).getItemName());
         fragment.setArguments(args);
@@ -110,7 +110,6 @@ public class MainActivity extends ActionBarActivity {
                 .commit();
 
         mDrawerList.setItemChecked(possition, true);
-        setTitle(dataList.get(possition).getItemName());
         mDrawerLayout.closeDrawer(mDrawerList);
 
     }
@@ -166,6 +165,18 @@ public class MainActivity extends ActionBarActivity {
                                 long id) {
             SelectItem(position);
 
+        }
+    }
+
+    @Override
+    public void onBackPressed(){
+        FragmentManager fm = getFragmentManager();
+        if (fm.getBackStackEntryCount() > 0) {
+            Log.i("MainActivity", "popping backstack");
+            fm.popBackStack();
+        } else {
+            Log.i("MainActivity", "nothing on backstack, calling super");
+            super.onBackPressed();
         }
     }
 

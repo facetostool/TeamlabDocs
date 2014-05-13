@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:background="#FFF"
-    android:focusableInTouchMode="true">
+    android:background="#FFF">
 
     <ImageView
         android:id="@+id/ivImage"
@@ -13,6 +12,9 @@
         android:layout_height="match_parent"
         android:src="@drawable/file_xls"
         android:scaleType="centerInside"
+        android:focusableInTouchMode="false"
+        android:clickable="false"
+        android:focusable="false"
         android:padding="1dp">
 
     </ImageView>
@@ -32,7 +34,10 @@
             android:textSize="16sp"
             android:singleLine="true"
             android:textColor="#333"
-            android:textIsSelectable="false">
+            android:textIsSelectable="false"
+            android:focusableInTouchMode="false"
+            android:clickable="false"
+            android:focusable="false">
         </TextView>
 
         <TextView
@@ -43,6 +48,9 @@
             android:id="@+id/textDesc"
             android:singleLine="true"
             android:textSize="12sp"
+            android:focusableInTouchMode="false"
+            android:clickable="false"
+            android:focusable="false"
             android:textColor="#787878"
             android:textIsSelectable="true" />
 

@@ -24,11 +24,9 @@ public class TeamlabAPIDocuments {
     private RequestQueue mQueue;
     private String url;
     private String token;
-    private String FILE_API_PATH = "/files";
+    private String FILE_API_PATH = "/files/";
 
     private OnDocumentsListener mListener;
-
-    public static final String URL = "https://vasyapupkinloh.teamlab.com/API/2.0/AUTHENTICATION.json";
 
     public TeamlabAPIDocuments(Context context, String url, String token) {
         mQueue = Volley.newRequestQueue(context);
@@ -37,23 +35,29 @@ public class TeamlabAPIDocuments {
     }
 
     public void myDocuments() {
-        getDocumentsRequest("/@my.json");
+        getDocumentsRequest("@my");
     }
 
     public void shaderWithMe() {
-        getDocumentsRequest("/@share.json");
+        getDocumentsRequest("@share");
     }
 
     public void common() {
-        getDocumentsRequest("/@common.json");
+        getDocumentsRequest("@common");
     }
 
     public void recycleBin() {
-        getDocumentsRequest("/@trash.json");
+        getDocumentsRequest("@trash");
     }
 
+    public void openFolder(String folderId) {
+        getDocumentsRequest(folderId);
+    }
+
+
     private void getDocumentsRequest(String specialUrl){
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url + specialUrl, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
+                url + specialUrl + TeamlabAPI.REQUEST_TYPE, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 TeamlabFolderResponse responseObj = null;
