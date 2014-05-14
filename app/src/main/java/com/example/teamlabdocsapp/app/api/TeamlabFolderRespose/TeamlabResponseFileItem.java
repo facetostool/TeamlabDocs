@@ -1,6 +1,6 @@
 package com.example.teamlabdocsapp.app.api.TeamlabFolderRespose;
 
-public class TeamlabResponseFileItem {
+public class TeamlabResponseFileItem implements TeamlabResponseItem {
 
     public static final String SPREADSHEET = "xlsx";
     public static final String DOCUMENT = "docx";
@@ -47,7 +47,18 @@ public class TeamlabResponseFileItem {
         return str[str.length-1];
     }
 
+    @Override
     public String getInfo(){
         return "file";
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+         public String getTitle() {
+        return title;
     }
 }

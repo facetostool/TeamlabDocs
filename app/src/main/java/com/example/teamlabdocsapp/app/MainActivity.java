@@ -13,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.teamlabdocsapp.app.Session.SessionManager;
@@ -35,13 +34,7 @@ public class MainActivity extends ActionBarActivity {
 
     List<DrawerItem> dataList;
 
-    TeamlabAPIDocuments documentsAPI;
-
     SessionManager session;
-
-    ContentAdapter contentAdapter;
-
-    Button btnLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +42,6 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         session = new SessionManager(this);
-        //close from activity if user don't loggedIn
         if (!session.checkLogin())
             return;
 
@@ -77,19 +69,17 @@ public class MainActivity extends ActionBarActivity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
 
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-                R.drawable.ic_drawer, R.string.drawer_open,
-                R.string.drawer_close) {
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer,
+                R.string.drawer_open, R.string.drawer_close) {
+
             public void onDrawerClosed(View view) {
                 getActionBar().setTitle(mTitle);
-                invalidateOptionsMenu(); // creates call to
-                // onPrepareOptionsMenu()
+                invalidateOptionsMenu();
             }
 
             public void onDrawerOpened(View drawerView) {
-                getActionBar().setTitle(mDrawerTitle);
-                invalidateOptionsMenu(); // creates call to
-                // onPrepareOptionsMenu()
+ //               getActionBar().setTitle(mDrawerTitle);
+                invalidateOptionsMenu();
             }
         };
 
@@ -100,16 +90,16 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-    public void SelectItem(int possition) {
+    public void SelectItem(int position) {
         Fragment fragment = new ContentViewer(this);
         Bundle args = new Bundle();
-        args.putString(ContentViewer.ITEM_NAME, dataList.get(possition).getItemName());
+        args.putString(ContentViewer.ITEM_NAME, dataList.get(position).getItemName());
         fragment.setArguments(args);
         FragmentManager frgManager = getFragmentManager();
-        frgManager.beginTransaction().replace(R.id.content_frame, fragment)
+        frgManager.beginTransaction().replace(R.id.content_frame, fragment, "TAG")
                 .commit();
 
-        mDrawerList.setItemChecked(possition, true);
+        mDrawerList.setItemChecked(position, true);
         mDrawerLayout.closeDrawer(mDrawerList);
 
     }
@@ -123,14 +113,11 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // The action bar home/up action should open or close the drawer.
-        // ActionBarDrawerToggle will take care of this.
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
@@ -145,15 +132,12 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        // Pass any configuration change to the drawer toggles
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -161,10 +145,8 @@ public class MainActivity extends ActionBarActivity {
     private class DrawerItemClickListener implements
             ListView.OnItemClickListener {
         @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position,
-                                long id) {
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             SelectItem(position);
-
         }
     }
 

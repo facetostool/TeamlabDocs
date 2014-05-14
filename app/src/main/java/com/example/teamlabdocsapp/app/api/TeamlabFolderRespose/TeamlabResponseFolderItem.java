@@ -3,7 +3,7 @@ package com.example.teamlabdocsapp.app.api.TeamlabFolderRespose;
 /**
  * Created by facetostool on 09.05.2014.
  */
-public class TeamlabResponseFolderItem {
+public class TeamlabResponseFolderItem implements TeamlabResponseItem{
     public String id;
     public int parentId;
     public int fileCounts;
@@ -34,7 +34,18 @@ public class TeamlabResponseFolderItem {
         this.createdTime = createdTime;
     }
 
+    @Override
     public String getInfo(){
         return "folder";
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public String getTitle() {
+        return title;
     }
 }
