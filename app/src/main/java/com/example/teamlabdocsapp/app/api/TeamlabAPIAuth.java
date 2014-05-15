@@ -20,10 +20,10 @@ public class TeamlabAPIAuth {
     private RequestQueue mQueue;
     private String url;
     private String AUTH_API_PATH = "/AUTHENTICATION.json";
+    private String LOGIN_NAME_KEY = "userName";
+    private String LOGIN_PSWD_KEY = "password";
 
     private OnAuthListener mListener;
-
-    public static final String URL = "https://vasyapupkinloh.teamlab.com/API/2.0/AUTHENTICATION.json";
 
     public TeamlabAPIAuth(Context context, String url) {
         mQueue = Volley.newRequestQueue(context);
@@ -36,8 +36,8 @@ public class TeamlabAPIAuth {
             password = "123456";
         }
         Map<String, String> params = new HashMap<String, String>();
-        params.put("userName", userName);
-        params.put("password", password);
+        params.put(LOGIN_NAME_KEY, userName);
+        params.put(LOGIN_PSWD_KEY, password);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, new JSONObject(params), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {

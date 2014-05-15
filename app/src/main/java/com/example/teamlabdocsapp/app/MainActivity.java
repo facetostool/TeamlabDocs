@@ -1,7 +1,9 @@
 package com.example.teamlabdocsapp.app;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -22,13 +24,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
 
-    private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     DrawerAdapter adapter;
 
@@ -47,23 +48,26 @@ public class MainActivity extends ActionBarActivity {
 
         // Initializing
         dataList = new ArrayList<DrawerItem>();
-        mTitle = mDrawerTitle = getTitle();
+        mTitle = getTitle();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
                 GravityCompat.START);
 
-        dataList.add(new DrawerItem(ContentViewer.MY_DOCUMENTS, R.drawable.ic_action_email));
-        dataList.add(new DrawerItem(ContentViewer.SHARED, R.drawable.ic_action_good));
-        dataList.add(new DrawerItem(ContentViewer.COMMON, R.drawable.ic_action_gamepad));
-        dataList.add(new DrawerItem(ContentViewer.TRASH, R.drawable.ic_action_search));
+        dataList.add(new DrawerItem(getString(R.string.menu_my_documents),
+                R.drawable.ic_action_email));
+        dataList.add(new DrawerItem(getString(R.string.menu_shared),
+                R.drawable.ic_action_group));
+        dataList.add(new DrawerItem(getString(R.string.menu_common),
+                R.drawable.ic_action_cloud));
+        dataList.add(new DrawerItem(getString(R.string.menu_trash),
+                android.R.drawable.ic_menu_delete));
 
         adapter = new DrawerAdapter(this, R.layout.drawer_item,
                 dataList);
 
         mDrawerList.setAdapter(adapter);
-
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -78,7 +82,6 @@ public class MainActivity extends ActionBarActivity {
             }
 
             public void onDrawerOpened(View drawerView) {
- //               getActionBar().setTitle(mDrawerTitle);
                 invalidateOptionsMenu();
             }
         };
@@ -93,10 +96,12 @@ public class MainActivity extends ActionBarActivity {
     public void SelectItem(int position) {
         Fragment fragment = new ContentViewer(this);
         Bundle args = new Bundle();
-        args.putString(ContentViewer.ITEM_NAME, dataList.get(position).getItemName());
+        args.putInt(ContentViewer.ITEM_NAME, position);
         fragment.setArguments(args);
         FragmentManager frgManager = getFragmentManager();
-        frgManager.beginTransaction().replace(R.id.content_frame, fragment, "TAG")
+        frgManager.beginTransaction()
+                .setCustomAnimations(R.animator.slide_in_left, R.animator.slide_in_right)
+                .replace(R.id.content_frame, fragment, getString(R.string.fragment_tag))
                 .commit();
 
         mDrawerList.setItemChecked(position, true);
@@ -154,10 +159,8 @@ public class MainActivity extends ActionBarActivity {
     public void onBackPressed(){
         FragmentManager fm = getFragmentManager();
         if (fm.getBackStackEntryCount() > 0) {
-            Log.i("MainActivity", "popping backstack");
             fm.popBackStack();
         } else {
-            Log.i("MainActivity", "nothing on backstack, calling super");
             super.onBackPressed();
         }
     }

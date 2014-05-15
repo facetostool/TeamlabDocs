@@ -35,6 +35,7 @@ public class TeamlabAPIDocuments {
     }
 
     public void myDocuments() {
+        Log.v("OPERATION", "CREATE REQUEST");
         getDocumentsRequest("@my");
     }
 
@@ -59,6 +60,7 @@ public class TeamlabAPIDocuments {
                 url + specialUrl + TeamlabAPI.REQUEST_TYPE, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+                Log.v("OPERATION", "GET JSON RESPONSE");
                 TeamlabFolderResponse responseObj = null;
                 try {
                     responseObj = TeamlabFolderResponse.createTeamlabFolderResponse(response);
@@ -79,10 +81,12 @@ public class TeamlabAPIDocuments {
             public Map<String,String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
                 Log.v("JSON new", " " + token);
+                Log.v("OPERATION", "SHOW JSON");
                 headers.put("AUTHORIZATION", token);
                 return headers;
             }
         };
+        Log.v("OPERATION", "ADD REQUEST IN QUEUE");
         mQueue.add(jsonObjectRequest);
     }
 

@@ -4,9 +4,44 @@
     <string name="app_name">TeamlabDocsApp</string>
     <string name="hello_world">Hello world!</string>
     <string name="logout_settings">Logout</string>
-    <string name="title_activity_main">MainActivity</string>
 
+    <string name="title_activity_main">MainActivity</string>
+    <string name="fragment_tag">TAG</string>
+
+    <!-- Menu Strings -->
+    <string name="menu_my_documents">My Documents</string>
+    <string name="menu_shared">Shared with Me</string>
+    <string name="menu_common">Common Documents</string>
+    <string name="menu_trash">Recycle Bin</string>
     <string name="drawer_open">Open drawer</string>
     <string name="drawer_close">Close drawer</string>
+
+    <!-- Login Activity -->
+    <string name="title_activity_login">Sign in</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="prompt_portal">Portal</string>
+    <string name="login_fail">"Login failed…",</string>
+    <string name="error_invalid">"Username/Password/Portal is incorrect"</string>
+    <string name="error_field_required">"Please enter username, password and portal"</string>
+    <string name="progressLogin">"Trying to login…"</string>
+
+    <!-- Context menu -->
+    <string name="context_title">Options</string>
+    <string name="context_delete_opt">Delete</string>
+    <string name="context_rename_opt">Rename</string>
+
+    <!-- Delete confirm -->
+    <string name="confirm_delete_title">Delete confirm</string>
+    <string name="confirm_delete_message">Are you really want to delete </string>
+    <string name="confirm_delete_yes">Yes</string>
+    <string name="confirm_delete_no">No</string>
+
+    <!-- Rename dialog -->
+    <string name="rename_title">Rename</string>
+    <string name="rename_message">Enter new name:</string>
+    <string name="rename_ok">OK</string>
+    <string name="rename_cancel">Cancel</string>
 
 </resources>

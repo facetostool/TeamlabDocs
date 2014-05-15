@@ -1,5 +1,5 @@
 <resources>
-
+    <color name="blue">#ff556285</color>
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat">
         <!-- Customize your theme here. -->

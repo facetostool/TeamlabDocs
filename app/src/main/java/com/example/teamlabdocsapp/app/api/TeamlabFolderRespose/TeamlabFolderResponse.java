@@ -114,4 +114,19 @@ public class TeamlabFolderResponse {
         }
         return files;
     }
+
+    public int getSize() {
+        return files.size() + folders.size();
+    }
+
+    public TeamlabResponseItem getItem(int position) {
+        int fSize = folders.size();
+        TeamlabResponseItem item = null;
+        if (fSize > position) {
+            item = folders.get(position);
+        } else {
+            item = files.get(position - (fSize) );
+        }
+        return item;
+    }
 }

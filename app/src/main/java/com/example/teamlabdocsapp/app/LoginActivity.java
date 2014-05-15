@@ -1,7 +1,7 @@
 package com.example.teamlabdocsapp.app;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,12 +16,10 @@ import com.example.teamlabdocsapp.app.api.TeamlabAPI;
 import com.example.teamlabdocsapp.app.api.TeamlabAPIAuth;
 import com.example.teamlabdocsapp.app.listnerers.OnAuthListener;
 
-public class LoginActivity extends ActionBarActivity implements OnAuthListener {
+public class LoginActivity extends Activity implements OnAuthListener {
 
     TextView tv;
     ProgressBar pb;
-
-    String LOG_TAG = "tag";
 
     EditText txtUsername, txtPassword, txtPortal;
 
@@ -45,8 +43,6 @@ public class LoginActivity extends ActionBarActivity implements OnAuthListener {
         tv = (TextView) findViewById(R.id.textProgress);
         pb = (ProgressBar) findViewById(R.id.progressBar);
 
-        Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(),
-                Toast.LENGTH_LONG).show();
     }
 
     public void logIn(View view) {
@@ -56,7 +52,6 @@ public class LoginActivity extends ActionBarActivity implements OnAuthListener {
         String password = txtPassword.getText().toString();
 
         if (email.trim().length() > 0 && password.trim().length() > 0) {
-            Log.v(LOG_TAG, "start loggening");
             TeamlabAPI tmAPI = new TeamlabAPI(getApplicationContext(), portal);
             TeamlabAPIAuth authAPI = tmAPI.auth();
             authAPI.setOnAuthListener(this);
@@ -81,7 +76,6 @@ public class LoginActivity extends ActionBarActivity implements OnAuthListener {
                     getString(R.string.error_invalid), false);
             return;
         }
-        Log.v("DEBUG", "Token: " + token);
     }
 
     @Override

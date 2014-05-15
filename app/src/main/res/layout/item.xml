@@ -26,6 +26,7 @@
         android:layout_marginLeft="5dp"
         android:layout_weight="1"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/tvName"
             android:layout_width="wrap_content"
@@ -55,5 +56,18 @@
             android:textIsSelectable="true" />
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ivInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_action_about"
+        android:scaleType="centerInside"
+        android:focusableInTouchMode="false"
+        android:clickable="false"
+        android:focusable="false"
+        android:padding="1dp">
+
+    </ImageView>
 
 </LinearLayout>

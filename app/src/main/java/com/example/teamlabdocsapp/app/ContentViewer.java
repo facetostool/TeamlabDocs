@@ -1,5 +1,6 @@
 package com.example.teamlabdocsapp.app;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -15,8 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.teamlabdocsapp.app.Session.SessionManager;
 import com.example.teamlabdocsapp.app.api.TeamlabAPI;
@@ -38,16 +39,18 @@ public class ContentViewer extends Fragment implements OnDocumentsListener {
     View view;
     ListView lvMain;
 
+    private int mShortAnimationDuration = 500;
+
     final int MENU_RENAME = 1;
     final int MENU_DELETE = 2;
 
-    public static final String OPEN_FOLDER = "folder";
     public static final String FOLDER_ID = "folderId";
 
-    public static final String MY_DOCUMENTS = "My Documents";
-    public static final String SHARED = "Shared with Me";
-    public static final String COMMON = "Common Documents";
-    public static final String TRASH = "Recycle Bin";
+    static final int MY_DOCUMENTS = 0;
+    static final int SHARED = 1;
+    static final int COMMON = 2;
+    static final int TRASH = 3;
+    static final int OPEN_FOLDER = 4;
 
     public static final String ITEM_NAME = "itemName";
 
@@ -58,32 +61,39 @@ public class ContentViewer extends Fragment implements OnDocumentsListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        Log.v("OPERATION", "START");
         view = inflater.inflate(R.layout.fragment_layout, container,
                 false);
         lvMain  = (ListView) view.findViewById(R.id.contentList);
 
-        String selected = getArguments().getString(ITEM_NAME);
-        Toast.makeText(context, selected, Toast.LENGTH_SHORT).show();
+        int selected = getArguments().getInt(ITEM_NAME);
         session = new SessionManager(context);
         HashMap<String, String> user = session.getUserDetails();
         TeamlabAPI tmAPI = new TeamlabAPI(context, user.get(SessionManager.KEY_PORTAL));
         documentsAPI = tmAPI.documents(user.get(SessionManager.KEY_TOKEN));
         documentsAPI.setDocumentsListener(this);
-        if (selected.equals(OPEN_FOLDER)) {
+        if (selected == OPEN_FOLDER) {
             String folderId = getArguments().getString(FOLDER_ID);
             documentsAPI.openFolder(folderId);
         } else {
-            if (selected.equals(MY_DOCUMENTS)) {
-                documentsAPI.myDocuments();
-            } else if (selected.equals(SHARED)) {
-                documentsAPI.shaderWithMe();
-            } else if (selected.equals(COMMON)) {
-                documentsAPI.common();
-            } else if (selected.equals(TRASH)) {
-                documentsAPI.recycleBin();
+            switch (selected){
+                case MY_DOCUMENTS:
+                    documentsAPI.myDocuments();
+                    ((Activity) context).setTitle(getString(R.string.menu_my_documents));
+                    break;
+                case SHARED:
+                    documentsAPI.shaderWithMe();
+                    ((Activity) context).setTitle(getString(R.string.menu_shared));
+                    break;
+                case COMMON:
+                    documentsAPI.common();
+                    ((Activity) context).setTitle(getString(R.string.menu_common));
+                    break;
+                case TRASH:
+                    documentsAPI.recycleBin();
+                    ((Activity) context).setTitle(getString(R.string.menu_trash));
+                    break;
             }
-            getActivity().setTitle(selected);
         }
         return view;
     }
@@ -91,10 +101,31 @@ public class ContentViewer extends Fragment implements OnDocumentsListener {
 
     @Override
     public void onDocumentsListener(TeamlabFolderResponse response) {
+        Log.v("OPERATION", "GET RESPONSE");
+//        final ProgressBar mLoadingView = (ProgressBar) getActivity().findViewById(R.id.loading_spinner);
+//        mLoadingView.animate()
+//                .alpha(0f)
+//                .setDuration(mShortAnimationDuration)
+//                .setListener(new AnimatorListenerAdapter() {
+//                    @Override
+//                    public void onAnimationEnd(Animator animation) {
+//                        mLoadingView.setVisibility(View.GONE);
+//                    }
+//                });
+        if (response.getSize() == 0) {
+            final LinearLayout mContentView = (LinearLayout) getActivity().findViewById(R.id.emptyContent);
+            mContentView.animate()
+                    .alpha(1f)
+                    .setDuration(mShortAnimationDuration)
+                    .setListener(null);
+        }
+
         contentAdapter = new ContentAdapter(context, response);
-        Log.v("RESPONSE", " " + response);
-        // настраиваем список
         lvMain.setAdapter(contentAdapter);
+        lvMain.animate()
+                .alpha(1f)
+                .setDuration(mShortAnimationDuration)
+                .setListener(null);
 
         lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -102,24 +133,24 @@ public class ContentViewer extends Fragment implements OnDocumentsListener {
                                     int position, long id) {
                 Object item = lvMain.getAdapter().getItem(position);
                 if (item instanceof TeamlabResponseFolderItem) {
-                    TeamlabResponseFolderItem folder = (TeamlabResponseFolderItem) item;
-                    Toast.makeText(getActivity(), "Stop Clicking me: folder", Toast.LENGTH_SHORT).show();
-                    Fragment fragment = new ContentViewer(getActivity());
+                    Fragment fragment = new ContentViewer(context);
                     Bundle args = new Bundle();
-                    args.putString(ContentViewer.ITEM_NAME, ContentViewer.OPEN_FOLDER);
-                    args.putString(ContentViewer.FOLDER_ID, folder.id);
+                    args.putInt(ContentViewer.ITEM_NAME, ContentViewer.OPEN_FOLDER);
+                    args.putString(ContentViewer.FOLDER_ID, ((TeamlabResponseFolderItem) item).id);
                     fragment.setArguments(args);
                     FragmentManager frgManager = getFragmentManager();
-                    frgManager.beginTransaction().replace(R.id.content_frame, fragment, "TAG").addToBackStack("tag")
+                    frgManager.beginTransaction()
+                            .setCustomAnimations(R.animator.slide_in_left, R.animator.slide_in_right)
+                            .replace(R.id.content_frame, fragment, getString(R.string.fragment_tag))
+                            .addToBackStack("tag")
                             .commit();
-                    getActivity().setTitle(folder.title);
-                }   else {
-                    Toast.makeText(getActivity(), "Stop Clicking me: file", Toast.LENGTH_SHORT).show();
+                    ((Activity) context).setTitle(((TeamlabResponseFolderItem) item).title);
                 }
             }
         });
-
         registerForContextMenu(lvMain);
+
+        Log.v("OPERATION", "END");
     }
 
     @Override
@@ -127,8 +158,10 @@ public class ContentViewer extends Fragment implements OnDocumentsListener {
                                     ContextMenu.ContextMenuInfo menuInfo) {
         switch (v.getId()) {
             case R.id.contentList:
-                menu.add(0, MENU_DELETE, 0, "Delete");
-                menu.add(0, MENU_RENAME, 0, "Rename");
+                menu.setHeaderTitle(R.string.context_title);
+                menu.setHeaderIcon(android.R.drawable.ic_dialog_dialer);
+                menu.add(0, MENU_DELETE, 0, R.string.context_delete_opt);
+                menu.add(0, MENU_RENAME, 0, R.string.context_rename_opt);
                 break;
         }
     }
@@ -140,11 +173,11 @@ public class ContentViewer extends Fragment implements OnDocumentsListener {
         final TeamlabResponseItem selectedItem = (TeamlabResponseItem) item;
         switch (menuItem.getItemId()) {
             case MENU_DELETE:
-                new AlertDialog.Builder(getActivity())
+                new AlertDialog.Builder(context)
                         .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle("Delete confirm")
-                        .setMessage("Are you really want to delete " + selectedItem.getTitle() + " ?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setTitle(R.string.confirm_delete_title)
+                        .setMessage(getString(R.string.confirm_delete_message) + selectedItem.getTitle() + " ?")
+                        .setPositiveButton(R.string.confirm_delete_yes, new DialogInterface.OnClickListener() {
 
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -153,27 +186,21 @@ public class ContentViewer extends Fragment implements OnDocumentsListener {
                                 } else if(selectedItem instanceof TeamlabResponseFileItem) {
                                     documentsAPI.deleteFile(selectedItem.getId());
                                 }
-                                Fragment currentFragment = getFragmentManager().findFragmentByTag("TAG");
-                                FragmentTransaction fragTransaction = getFragmentManager().beginTransaction();
-                                fragTransaction.detach(currentFragment);
-                                fragTransaction.attach(currentFragment);
-                                fragTransaction.commit();
+                                reloadFragment();
                             }
 
                         })
-                        .setNegativeButton("No", null)
+                        .setNegativeButton(R.string.confirm_delete_no, null)
                         .show();
-
-                Toast.makeText(getActivity(), "Delete " + selectedItem.getTitle(), Toast.LENGTH_SHORT).show();
                 break;
             case MENU_RENAME:
-                LayoutInflater factory = LayoutInflater.from(getActivity());
-                final View textEntryView = factory.inflate(R.layout.alert_dialog_text_entry, null);
-                new AlertDialog.Builder(getActivity())
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle("Rename")
+                LayoutInflater factory = LayoutInflater.from(context);
+                final View textEntryView = factory.inflate(R.layout.rename_dialog, null);
+                new AlertDialog.Builder(context)
+                        .setIcon(android.R.drawable.ic_dialog_info)
+                        .setTitle(R.string.rename_title)
                         .setView(textEntryView)
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.rename_ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 String newName = ((EditText) textEntryView.
                                         findViewById(R.id.editText)).getText().toString();
@@ -183,18 +210,21 @@ public class ContentViewer extends Fragment implements OnDocumentsListener {
                                 } else if (selectedItem instanceof TeamlabResponseFileItem) {
                                     documentsAPI.renameFile(selectedItem.getId(), newName);
                                 }
-                                Fragment currentFragment = getFragmentManager().findFragmentByTag("TAG");
-                                FragmentTransaction fragTransaction = getFragmentManager().beginTransaction();
-                                fragTransaction.detach(currentFragment);
-                                fragTransaction.attach(currentFragment);
-                                fragTransaction.commit();
+                                reloadFragment();
                             }
                         })
-                        .setNegativeButton("Cancel", null)
+                        .setNegativeButton(R.string.rename_cancel, null)
                         .show();
-                Toast.makeText(getActivity(), "Rename " + selectedItem.getTitle(), Toast.LENGTH_SHORT).show();
                 break;
         }
         return super.onContextItemSelected(menuItem);
+    }
+
+    private void reloadFragment() {
+        Fragment currentFragment = getFragmentManager().findFragmentByTag(getString(R.string.fragment_tag));
+        FragmentTransaction fragTransaction = getFragmentManager().beginTransaction();
+        fragTransaction.detach(currentFragment);
+        fragTransaction.attach(currentFragment);
+        fragTransaction.commit();
     }
 }

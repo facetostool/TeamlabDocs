@@ -14,7 +14,7 @@
         >
 
         <LinearLayout
-
+            android:id="@+id/drawerItem"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:minHeight="40dp"
@@ -36,20 +36,21 @@
                 android:text="TeamLab Office"
                 android:layout_gravity="center_vertical"
                 android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/abc_search_url_text_pressed"
 
                 />
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="1dp"
-            android:layout_marginTop="1dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="#DADADC"
+        <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:layout_marginBottom="1dp"-->
+            <!--android:layout_marginTop="1dp"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:background="#DADADC"-->
 
-            ></View>
+            <!--></View>-->
 
     </LinearLayout>
 

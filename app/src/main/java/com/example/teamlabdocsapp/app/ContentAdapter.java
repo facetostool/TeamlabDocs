@@ -7,10 +7,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.teamlabdocsapp.app.api.TeamlabFolderRespose.TeamlabFolderResponse;
 import com.example.teamlabdocsapp.app.api.TeamlabFolderRespose.TeamlabResponseFileItem;
 import com.example.teamlabdocsapp.app.api.TeamlabFolderRespose.TeamlabResponseFolderItem;
+import com.example.teamlabdocsapp.app.api.TeamlabFolderRespose.TeamlabResponseItem;
 
 public class ContentAdapter extends BaseAdapter {
     Context ctx;
@@ -28,55 +30,42 @@ public class ContentAdapter extends BaseAdapter {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    // кол-во элементов
     @Override
     public int getCount() {
-        return object.files.size() + object.folders.size();
+        return object.getSize();
     }
 
-    // элемент по позиции
     @Override
-    public Object getItem(int position) {
-        Object item = null;
-        int fSize = object.folders.size();
-        if (fSize > position) {
-            item = object.folders.get(position);
-        } else {
-            item = object.files.get(position - (fSize) );
-        }
-        return item;
+    public TeamlabResponseItem getItem(int position) {
+        return object.getItem(position);
     }
 
-    // id по позиции
     @Override
     public long getItemId(int position) {
         return position;
     }
-    // пункт списка
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // используем созданные, но не используемые view
         View view = convertView;
         if (view == null) {
             view = lInflater.inflate(R.layout.item, parent, false);
         }
 
-        Object p = getItem(position);
+        TeamlabResponseItem i = getItem(position);
 
         imageView = (ImageView) view.findViewById(R.id.ivImage);
         tvName = (TextView) view.findViewById(R.id.tvName);
         textDesc = (TextView) view.findViewById(R.id.textDesc);
 
-        if (p instanceof TeamlabResponseFolderItem) {
-            TeamlabResponseFolderItem folder = ((TeamlabResponseFolderItem) p);
+        if (i instanceof TeamlabResponseFolderItem) {
+            TeamlabResponseFolderItem folder = ((TeamlabResponseFolderItem) i);
 
             imageView.setImageResource(R.drawable.folder);
             tvName.setText(folder.title);
             textDesc.setText(folder.getInfo());
-
-            view.setTag(folder.id);
         } else {
-            TeamlabResponseFileItem file = ((TeamlabResponseFileItem) p);
+            TeamlabResponseFileItem file = ((TeamlabResponseFileItem) i);
             if (file.type.equals(TeamlabResponseFileItem.SPREADSHEET)) {
                 imageView.setImageResource(R.drawable.file_xls);
             } else if (file.type.equals(TeamlabResponseFileItem.DOCUMENT)) {
@@ -90,26 +79,16 @@ public class ContentAdapter extends BaseAdapter {
 
             view.setTag(file.id);
         }
+        ImageView iv = (ImageView) view.findViewById(R.id.ivInfo);
+        iv.setOnClickListener(infoClickListener);
         return view;
     }
 
-//    // содержимое корзины
-//    ArrayList<Product> getBox() {
-//        ArrayList<Product> box = new ArrayList<Product>();
-//        for (Product p : objects) {
-//            // если в корзине
-//            if (p.box)
-//                box.add(p);
-//        }
-//        return box;
-//    }
+    View.OnClickListener infoClickListener = (new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Toast.makeText(ctx, "Info click", Toast.LENGTH_SHORT).show();
+        }
+    });
 
-//    // обработчик для чекбоксов
-//    OnCheckedChangeListener myCheckChangList = new OnCheckedChangeListener() {
-//        public void onCheckedChanged(CompoundButton buttonView,
-//                                     boolean isChecked) {
-//            // меняем данные товара (в корзине или нет)
-//            getProduct((Integer) buttonView.getTag()).box = isChecked;
-//        }
-//    };
 }
