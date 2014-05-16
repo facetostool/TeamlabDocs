@@ -1,4 +1,4 @@
-package com.example.teamlabdocsapp.app;
+package com.example.teamlabdocsapp.app.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.teamlabdocsapp.app.R;
 import com.example.teamlabdocsapp.app.api.TeamlabFolderRespose.TeamlabFolderResponse;
 import com.example.teamlabdocsapp.app.api.TeamlabFolderRespose.TeamlabResponseFileItem;
 import com.example.teamlabdocsapp.app.api.TeamlabFolderRespose.TeamlabResponseFolderItem;

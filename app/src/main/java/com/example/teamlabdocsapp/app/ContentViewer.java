@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.example.teamlabdocsapp.app.Session.SessionManager;
+import com.example.teamlabdocsapp.app.adapters.ContentAdapter;
 import com.example.teamlabdocsapp.app.api.TeamlabAPI;
 import com.example.teamlabdocsapp.app.api.TeamlabAPIDocuments;
 import com.example.teamlabdocsapp.app.api.TeamlabFolderRespose.TeamlabFolderResponse;

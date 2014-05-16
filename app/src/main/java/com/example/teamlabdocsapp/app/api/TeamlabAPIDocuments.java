@@ -166,22 +166,4 @@ public class TeamlabAPIDocuments {
         mListener = listener;
     }
 
-//    public Response createFolder(String parentId, String title) {
-//        HashMap<String,String> params =  new HashMap<String,String>();
-//        params.put("title", title);
-//        return Request.sendRequest(Request.POST, this.apiURL + "/" + parentId, params, this.token);
-//    }
-//
-//    public Response renameFolder(String parentId, String title) {
-//        HashMap<String,String> params =  new HashMap<String,String>();
-//        params.put("title", title);
-//        return Request.sendRequest(Request.PUT, this.apiURL + "/" + parentId, params, this.token);
-//    }
-//
-//    public Response renameFile(String fileId, String title) {
-//        HashMap<String,String> params =  new HashMap<String,String>();
-//        params.put("title", title);
-//        return Request.sendRequest(Request.PUT, this.apiURL + "/file/" + fileId, params, this.token);
-//    }
-
 }

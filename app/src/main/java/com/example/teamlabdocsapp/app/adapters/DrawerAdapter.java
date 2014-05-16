@@ -1,4 +1,4 @@
-package com.example.teamlabdocsapp.app;
+package com.example.teamlabdocsapp.app.adapters;
 
 
 import android.app.Activity;
@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.teamlabdocsapp.app.DrawerItem;
+import com.example.teamlabdocsapp.app.R;
 
 import java.util.List;
 
