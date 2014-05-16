@@ -55,7 +55,7 @@ public class LoginActivity extends Activity implements OnAuthListener {
             TeamlabAPI tmAPI = new TeamlabAPI(getApplicationContext(), portal);
             TeamlabAPIAuth authAPI = tmAPI.auth();
             authAPI.setOnAuthListener(this);
-            authAPI.auth(email, portal);
+            authAPI.auth(email, password);
         } else {
             alert.showAlertDialog(LoginActivity.this, getString(R.string.login_fail),
                     getString(R.string.error_field_required), false);

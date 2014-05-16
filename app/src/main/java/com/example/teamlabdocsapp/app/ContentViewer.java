@@ -10,6 +10,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -49,13 +50,10 @@ public class ContentViewer extends Fragment implements OnDocumentsListener {
     final int MENU_RENAME = 1;
     final int MENU_DELETE = 2;
 
-    public static final String FOLDER_ID = "folderId";
-
     static final int MY_DOCUMENTS = 0;
     static final int SHARED = 1;
     static final int COMMON = 2;
     static final int TRASH = 3;
-    static final int OPEN_FOLDER = 4;
 
     public static final String ITEM_NAME = "itemName";
 
@@ -77,28 +75,24 @@ public class ContentViewer extends Fragment implements OnDocumentsListener {
         TeamlabAPI tmAPI = new TeamlabAPI(context, user.get(SessionManager.KEY_PORTAL));
         documentsAPI = tmAPI.documents(user.get(SessionManager.KEY_TOKEN));
         documentsAPI.setDocumentsListener(this);
-        if (selected == OPEN_FOLDER) {
-            String folderId = getArguments().getString(FOLDER_ID);
-            documentsAPI.openFolder(folderId);
-        } else {
-            switch (selected) {
-                case MY_DOCUMENTS:
-                    documentsAPI.myDocuments();
-                    ((Activity) context).setTitle(getString(R.string.menu_my_documents));
-                    break;
-                case SHARED:
-                    documentsAPI.shaderWithMe();
-                    ((Activity) context).setTitle(getString(R.string.menu_shared));
-                    break;
-                case COMMON:
-                    documentsAPI.common();
-                    ((Activity) context).setTitle(getString(R.string.menu_common));
-                    break;
-                case TRASH:
-                    documentsAPI.recycleBin();
-                    ((Activity) context).setTitle(getString(R.string.menu_trash));
-                    break;
-            }
+
+        switch (selected) {
+            case MY_DOCUMENTS:
+                documentsAPI.myDocuments();
+                ((Activity) context).setTitle(getString(R.string.menu_my_documents));
+                break;
+            case SHARED:
+                documentsAPI.shaderWithMe();
+                ((Activity) context).setTitle(getString(R.string.menu_shared));
+                break;
+            case COMMON:
+                documentsAPI.common();
+                ((Activity) context).setTitle(getString(R.string.menu_common));
+                break;
+            case TRASH:
+                documentsAPI.recycleBin();
+                ((Activity) context).setTitle(getString(R.string.menu_trash));
+                break;
         }
         return view;
     }
@@ -137,20 +131,24 @@ public class ContentViewer extends Fragment implements OnDocumentsListener {
                                     int position, long id) {
                 Object item = lvMain.getAdapter().getItem(position);
                 if (item instanceof TeamlabResponseFolderItem) {
-                    Fragment fragment = new ContentViewer(context);
-                    Bundle args = new Bundle();
-                    args.putInt(ContentViewer.ITEM_NAME, ContentViewer.OPEN_FOLDER);
-                    args.putString(ContentViewer.FOLDER_ID, ((TeamlabResponseFolderItem) item).id);
-                    fragment.setArguments(args);
-                    FragmentManager frgManager = getFragmentManager();
-                    frgManager.beginTransaction()
-                            .setCustomAnimations(R.animator.slide_in_left, R.animator.slide_in_right)
-                            .replace(R.id.content_frame, fragment, getString(R.string.fragment_tag))
-                            .addToBackStack("tag")
-                            .commit();
-                    ((Activity) context).setTitle(((TeamlabResponseFolderItem) item).title);
-                    ActionBar ab = getActivity().getActionBar();
-                    ab.setDisplayShowHomeEnabled(true);
+                    Intent i=new Intent(context, ContentListActivity.class);
+                    i.putExtra(ContentListActivity.FOLDER_ID, ((TeamlabResponseFolderItem) item).id);
+                    context.startActivity(i);
+                    ((Activity) context).overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
+//                    Fragment fragment = new ContentViewer(context);
+//                    Bundle args = new Bundle();
+//                    args.putInt(ContentViewer.ITEM_NAME, ContentViewer.OPEN_FOLDER);
+//                    args.putString(ContentViewer.FOLDER_ID, ((TeamlabResponseFolderItem) item).id);
+//                    fragment.setArguments(args);
+//                    FragmentManager frgManager = getFragmentManager();
+//                    frgManager.beginTransaction()
+//                            .setCustomAnimations(R.animator.slide_in_left, R.animator.slide_in_right)
+//                            .replace(R.id.content_frame, fragment, getString(R.string.fragment_tag))
+//                            .addToBackStack("tag")
+//                            .commit();
+//                    ((Activity) context).setTitle(((TeamlabResponseFolderItem) item).title);
+//                    ActionBar ab = getActivity().getActionBar();
+//                    ab.setDisplayShowHomeEnabled(true);
                 }
             }
         });
