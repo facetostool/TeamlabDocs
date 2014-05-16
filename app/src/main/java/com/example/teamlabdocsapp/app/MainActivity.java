@@ -3,6 +3,7 @@ package com.example.teamlabdocsapp.app;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -139,7 +140,6 @@ public class MainActivity extends Activity {
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
@@ -159,11 +159,23 @@ public class MainActivity extends Activity {
         FragmentManager fm = getFragmentManager();
         if (fm.getBackStackEntryCount() > 0) {
             fm.popBackStack();
+            removeCurrentFragment();
         } else {
             super.onBackPressed();
         }
     }
 
+    public void removeCurrentFragment()
+    {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        Fragment currentFrag =  getFragmentManager().findFragmentByTag(getString(R.string.fragment_tag));
+
+        if (currentFrag != null)
+            transaction.remove(currentFrag);
+
+        transaction.commit();
+
+    }
 }
 
 

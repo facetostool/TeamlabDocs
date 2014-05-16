@@ -24,7 +24,7 @@ public class ContentAdapter extends BaseAdapter {
     TextView tvName;
     TextView textDesc;
 
-    ContentAdapter(Context context, TeamlabFolderResponse folderResponse) {
+    public ContentAdapter(Context context, TeamlabFolderResponse folderResponse) {
         ctx = context;
         object = folderResponse;
         lInflater = (LayoutInflater) ctx

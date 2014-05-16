@@ -1,5 +1,7 @@
 package com.example.teamlabdocsapp.app;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -18,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.example.teamlabdocsapp.app.Session.SessionManager;
 import com.example.teamlabdocsapp.app.adapters.ContentAdapter;
@@ -40,7 +43,7 @@ public class ContentViewer extends Fragment implements OnDocumentsListener {
     View view;
     ListView lvMain;
 
-    private int mShortAnimationDuration = 500;
+    private int mShortAnimationDuration = 200;
 
     final int MENU_RENAME = 1;
     final int MENU_DELETE = 2;
@@ -103,16 +106,16 @@ public class ContentViewer extends Fragment implements OnDocumentsListener {
     @Override
     public void onDocumentsListener(TeamlabFolderResponse response) {
         Log.v("OPERATION", "GET RESPONSE");
-//        final ProgressBar mLoadingView = (ProgressBar) getActivity().findViewById(R.id.loading_spinner);
-//        mLoadingView.animate()
-//                .alpha(0f)
-//                .setDuration(mShortAnimationDuration)
-//                .setListener(new AnimatorListenerAdapter() {
-//                    @Override
-//                    public void onAnimationEnd(Animator animation) {
-//                        mLoadingView.setVisibility(View.GONE);
-//                    }
-//                });
+        final ProgressBar mLoadingView = (ProgressBar) getActivity().findViewById(R.id.loading_spinner);
+        mLoadingView.animate()
+                .alpha(0f)
+                .setDuration(mShortAnimationDuration)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        mLoadingView.setVisibility(View.GONE);
+                    }
+                });
         if (response.getSize() == 0) {
             final LinearLayout mContentView = (LinearLayout) getActivity().findViewById(R.id.emptyContent);
             mContentView.animate()
