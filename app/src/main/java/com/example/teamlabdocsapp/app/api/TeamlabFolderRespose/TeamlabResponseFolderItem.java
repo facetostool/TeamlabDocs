@@ -1,8 +1,5 @@
 package com.example.teamlabdocsapp.app.api.TeamlabFolderRespose;
 
-/**
- * Created by facetostool on 09.05.2014.
- */
 public class TeamlabResponseFolderItem implements TeamlabResponseItem{
     public String id;
     public int parentId;

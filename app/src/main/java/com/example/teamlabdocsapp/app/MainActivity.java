@@ -70,7 +70,10 @@ public class MainActivity extends Activity {
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+//        getActionBar().setDisplayHomeAsUpEnabled(true);
+//        getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+//        getActionBar().setHomeButtonEnabled(true);
+//        getActionBar().setDisplayShowHomeEnabled(true);
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer,
                 R.string.drawer_open, R.string.drawer_close) {
@@ -126,8 +129,12 @@ public class MainActivity extends Activity {
             return true;
         }
         int id = item.getItemId();
-        if (id == R.id.logout_settings) {
-            session.logoutUser();
+        switch (id){
+            case R.id.logout_settings:
+                session.logoutUser();
+            case R.id.home:
+                Log.v("KEY PRESS", "HOME");
+                backOnPreviouslyFragment();
         }
 
         return super.onOptionsItemSelected(item);
@@ -156,13 +163,19 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed(){
+        if (!backOnPreviouslyFragment()) {
+            super.onBackPressed();
+        }
+    }
+
+    public boolean backOnPreviouslyFragment() {
         FragmentManager fm = getFragmentManager();
         if (fm.getBackStackEntryCount() > 0) {
             fm.popBackStack();
             removeCurrentFragment();
-        } else {
-            super.onBackPressed();
+            return true;
         }
+        return false;
     }
 
     public void removeCurrentFragment()

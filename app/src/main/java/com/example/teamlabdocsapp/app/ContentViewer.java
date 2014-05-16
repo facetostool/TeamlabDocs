@@ -2,6 +2,7 @@ package com.example.teamlabdocsapp.app;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -68,7 +69,7 @@ public class ContentViewer extends Fragment implements OnDocumentsListener {
         Log.v("OPERATION", "START");
         view = inflater.inflate(R.layout.fragment_layout, container,
                 false);
-        lvMain  = (ListView) view.findViewById(R.id.contentList);
+        lvMain = (ListView) view.findViewById(R.id.contentList);
 
         int selected = getArguments().getInt(ITEM_NAME);
         session = new SessionManager(context);
@@ -80,7 +81,7 @@ public class ContentViewer extends Fragment implements OnDocumentsListener {
             String folderId = getArguments().getString(FOLDER_ID);
             documentsAPI.openFolder(folderId);
         } else {
-            switch (selected){
+            switch (selected) {
                 case MY_DOCUMENTS:
                     documentsAPI.myDocuments();
                     ((Activity) context).setTitle(getString(R.string.menu_my_documents));
@@ -131,8 +132,7 @@ public class ContentViewer extends Fragment implements OnDocumentsListener {
                 .setDuration(mShortAnimationDuration)
                 .setListener(null);
 
-        lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
+        lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 Object item = lvMain.getAdapter().getItem(position);
@@ -149,6 +149,8 @@ public class ContentViewer extends Fragment implements OnDocumentsListener {
                             .addToBackStack("tag")
                             .commit();
                     ((Activity) context).setTitle(((TeamlabResponseFolderItem) item).title);
+                    ActionBar ab = getActivity().getActionBar();
+                    ab.setDisplayShowHomeEnabled(true);
                 }
             }
         });
@@ -172,7 +174,7 @@ public class ContentViewer extends Fragment implements OnDocumentsListener {
 
     @Override
     public boolean onContextItemSelected(MenuItem menuItem) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuItem.getMenuInfo();
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
         Object item = lvMain.getAdapter().getItem(info.position);
         final TeamlabResponseItem selectedItem = (TeamlabResponseItem) item;
         switch (menuItem.getItemId()) {
@@ -187,7 +189,7 @@ public class ContentViewer extends Fragment implements OnDocumentsListener {
                             public void onClick(DialogInterface dialog, int which) {
                                 if (selectedItem instanceof TeamlabResponseFolderItem) {
                                     documentsAPI.deleteFolder(selectedItem.getId());
-                                } else if(selectedItem instanceof TeamlabResponseFileItem) {
+                                } else if (selectedItem instanceof TeamlabResponseFileItem) {
                                     documentsAPI.deleteFile(selectedItem.getId());
                                 }
                                 reloadFragment();
