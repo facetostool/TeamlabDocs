@@ -162,6 +162,36 @@ public class TeamlabAPIDocuments {
         mQueue.add(jsonObjectRequest);
     }
 
+    public void getFileInformation(String fileId) {
+        getInformationRequest("file/" + fileId);
+    }
+
+    public void getInformationRequest(String specialUrl) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT,
+                url + specialUrl + TeamlabAPI.REQUEST_TYPE, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.v("Response", response.toString());
+                //               mListener.onDocumentsListener(responseObj);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.v("Error", error.getMessage());
+//                mListener.onDocumentsListener(null);
+            }
+        }) {
+            @Override
+            public Map<String,String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                Log.v("JSON new", " " + token);
+                headers.put("AUTHORIZATION", token);
+                return headers;
+            }
+        };
+        mQueue.add(jsonObjectRequest);
+    }
+
     public void setDocumentsListener(OnDocumentsListener listener) {
         mListener = listener;
     }

@@ -2,11 +2,9 @@ package com.example.teamlabdocsapp.app;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -133,8 +131,8 @@ public class ContentViewer extends Fragment implements OnDocumentsListener {
                 if (item instanceof TeamlabResponseFolderItem) {
                     Intent i=new Intent(context, ContentListActivity.class);
                     i.putExtra(ContentListActivity.FOLDER_ID, ((TeamlabResponseFolderItem) item).id);
-                    context.startActivity(i);
-                    ((Activity) context).overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up );
+                    ((Activity) context).startActivityForResult(i, 1);
+                    ((Activity) context).overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_left);
 //                    Fragment fragment = new ContentViewer(context);
 //                    Bundle args = new Bundle();
 //                    args.putInt(ContentViewer.ITEM_NAME, ContentViewer.OPEN_FOLDER);

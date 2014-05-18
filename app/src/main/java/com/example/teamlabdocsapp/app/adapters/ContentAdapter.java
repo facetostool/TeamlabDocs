@@ -1,6 +1,8 @@
 package com.example.teamlabdocsapp.app.adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.teamlabdocsapp.app.ContentListActivity;
+import com.example.teamlabdocsapp.app.InfoActivity;
 import com.example.teamlabdocsapp.app.R;
 import com.example.teamlabdocsapp.app.api.TeamlabFolderRespose.TeamlabFolderResponse;
 import com.example.teamlabdocsapp.app.api.TeamlabFolderRespose.TeamlabResponseFileItem;
@@ -77,10 +81,9 @@ public class ContentAdapter extends BaseAdapter {
 
             tvName.setText(file.title);
             textDesc.setText(file.getInfo());
-
-            view.setTag(file.id);
         }
         ImageView iv = (ImageView) view.findViewById(R.id.ivInfo);
+        iv.setTag(i.getId());
         iv.setOnClickListener(infoClickListener);
         return view;
     }
@@ -88,6 +91,11 @@ public class ContentAdapter extends BaseAdapter {
     View.OnClickListener infoClickListener = (new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            String itemId = (String) view.getTag();
+            Intent i=new Intent(ctx, InfoActivity.class);
+            i.putExtra(InfoActivity.ID, itemId);
+            ((Activity) ctx).startActivityForResult(i, 1);
+            ((Activity) ctx).overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_left);
             Toast.makeText(ctx, "Info click", Toast.LENGTH_SHORT).show();
         }
     });

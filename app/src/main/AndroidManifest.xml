@@ -30,6 +30,11 @@
             android:name="com.example.teamlabdocsapp.app.ContentListActivity"
             android:parentActivityName=".MainActivity">
         </activity>
+
+        <activity
+            android:name="com.example.teamlabdocsapp.app.InfoActivity"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen">
+        </activity>
     </application>
 
 </manifest>

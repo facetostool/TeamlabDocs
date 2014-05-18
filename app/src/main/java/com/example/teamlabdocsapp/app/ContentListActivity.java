@@ -6,7 +6,6 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -94,7 +93,7 @@ public class ContentListActivity extends Activity implements OnDocumentsListener
                     Intent i = new Intent(ContentListActivity.this, ContentListActivity.class);
                     i.putExtra(ContentListActivity.FOLDER_ID, ((TeamlabResponseFolderItem) item).id);
                     ContentListActivity.this.startActivity(i);
-                    overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
                 }
             }
         });
@@ -110,9 +109,15 @@ public class ContentListActivity extends Activity implements OnDocumentsListener
             case R.id.logout_settings:
                 session.logoutUser();
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                onBackPressed();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        this.overridePendingTransition(R.anim.slide_out_right,R.anim.slide_in_right);
     }
 }
