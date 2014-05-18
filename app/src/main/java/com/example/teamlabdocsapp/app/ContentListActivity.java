@@ -18,8 +18,8 @@ import com.example.teamlabdocsapp.app.Session.SessionManager;
 import com.example.teamlabdocsapp.app.adapters.ContentAdapter;
 import com.example.teamlabdocsapp.app.api.TeamlabAPI;
 import com.example.teamlabdocsapp.app.api.TeamlabAPIDocuments;
-import com.example.teamlabdocsapp.app.api.TeamlabFolderRespose.TeamlabFolderResponse;
-import com.example.teamlabdocsapp.app.api.TeamlabFolderRespose.TeamlabResponseFolderItem;
+import com.example.teamlabdocsapp.app.api.TeamlabRespose.TeamlabFolderResponse;
+import com.example.teamlabdocsapp.app.api.TeamlabRespose.TeamlabResponseFolderItem;
 import com.example.teamlabdocsapp.app.listnerers.OnDocumentsListener;
 
 import java.util.HashMap;
@@ -118,6 +118,6 @@ public class ContentListActivity extends Activity implements OnDocumentsListener
     @Override
     public void onBackPressed() {
         finish();
-        this.overridePendingTransition(R.anim.slide_out_right,R.anim.slide_in_right);
+        this.overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_right);
     }
 }

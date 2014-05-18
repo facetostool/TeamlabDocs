@@ -1,4 +1,4 @@
-package com.example.teamlabdocsapp.app.api.TeamlabFolderRespose;
+package com.example.teamlabdocsapp.app.api.TeamlabRespose;
 
 /**
  * Created by facetostool on 14.05.2014.

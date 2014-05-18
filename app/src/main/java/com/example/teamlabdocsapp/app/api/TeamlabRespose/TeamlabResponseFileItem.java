@@ -1,4 +1,4 @@
-package com.example.teamlabdocsapp.app.api.TeamlabFolderRespose;
+package com.example.teamlabdocsapp.app.api.TeamlabRespose;
 
 public class TeamlabResponseFileItem implements TeamlabResponseItem {
 

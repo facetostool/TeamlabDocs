@@ -11,13 +11,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.teamlabdocsapp.app.ContentListActivity;
 import com.example.teamlabdocsapp.app.InfoActivity;
 import com.example.teamlabdocsapp.app.R;
-import com.example.teamlabdocsapp.app.api.TeamlabFolderRespose.TeamlabFolderResponse;
-import com.example.teamlabdocsapp.app.api.TeamlabFolderRespose.TeamlabResponseFileItem;
-import com.example.teamlabdocsapp.app.api.TeamlabFolderRespose.TeamlabResponseFolderItem;
-import com.example.teamlabdocsapp.app.api.TeamlabFolderRespose.TeamlabResponseItem;
+import com.example.teamlabdocsapp.app.api.TeamlabRespose.TeamlabFolderResponse;
+import com.example.teamlabdocsapp.app.api.TeamlabRespose.TeamlabResponseFileItem;
+import com.example.teamlabdocsapp.app.api.TeamlabRespose.TeamlabResponseFolderItem;
+import com.example.teamlabdocsapp.app.api.TeamlabRespose.TeamlabResponseItem;
 
 public class ContentAdapter extends BaseAdapter {
     Context ctx;
