@@ -1,5 +1,11 @@
 package com.example.teamlabdocsapp.app.api.TeamlabRespose;
 
+import com.example.teamlabdocsapp.app.api.helpers.TimeConvertHelper;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class TeamlabResponseFileItem implements TeamlabResponseItem {
 
     public static final String SPREADSHEET = "xlsx";
@@ -37,8 +43,8 @@ public class TeamlabResponseFileItem implements TeamlabResponseItem {
         this.sharedByMe = sharedByMe;
         this.updatedBy = updatedBy;
         this.createdBy = createdBy;
-        this.updatedTime = updatedTime;
-        this.createdTime = createdTime;
+        this.updatedTime = TimeConvertHelper.convertTime(updatedTime);
+        this.createdTime = TimeConvertHelper.convertTime(createdTime);
         this.type = getType(title);
     }
 
@@ -49,7 +55,13 @@ public class TeamlabResponseFileItem implements TeamlabResponseItem {
 
     @Override
     public String getInfo(){
-        return "file";
+        String info = "";
+//        if (updatedBy == null) {
+            info = createdBy + " | Created: " + createdTime + " | " + contentLength;
+//        } else {
+//            info = updatedBy + " | Обновлён: " + updatedTime + " | " + contentLength;
+//        }
+        return info;
     }
 
     @Override
@@ -58,7 +70,7 @@ public class TeamlabResponseFileItem implements TeamlabResponseItem {
     }
 
     @Override
-         public String getTitle() {
+    public String getTitle() {
         return title;
     }
 }

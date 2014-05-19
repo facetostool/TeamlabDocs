@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -32,10 +33,8 @@ public class ContentListActivity extends Activity implements OnDocumentsListener
 
     private int mShortAnimationDuration = 200;
 
-    final int MENU_RENAME = 1;
-    final int MENU_DELETE = 2;
-
     public static final String FOLDER_ID = "folderId";
+    public static final String TITLE = "title";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +48,8 @@ public class ContentListActivity extends Activity implements OnDocumentsListener
 
         Intent intent = getIntent();
         String folderId = intent.getStringExtra(FOLDER_ID);
+        String title = intent.getStringExtra(TITLE);
+        getActionBar().setTitle(title);
         session = new SessionManager(this);
         HashMap<String, String> user = session.getUserDetails();
         TeamlabAPI tmAPI = new TeamlabAPI(this, user.get(SessionManager.KEY_PORTAL));
@@ -92,6 +93,7 @@ public class ContentListActivity extends Activity implements OnDocumentsListener
                 if (item instanceof TeamlabResponseFolderItem) {
                     Intent i = new Intent(ContentListActivity.this, ContentListActivity.class);
                     i.putExtra(ContentListActivity.FOLDER_ID, ((TeamlabResponseFolderItem) item).id);
+                    i.putExtra(ContentListActivity.TITLE, ((TeamlabResponseFolderItem) item).getTitle());
                     ContentListActivity.this.startActivity(i);
                     overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
                 }
@@ -119,5 +121,23 @@ public class ContentListActivity extends Activity implements OnDocumentsListener
     public void onBackPressed() {
         finish();
         this.overridePendingTransition(R.anim.slide_out_right, R.anim.slide_in_right);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            reloadActivity();
+        }
+    }
+
+    public void reloadActivity() {
+        finish();
+        startActivity(getIntent());
     }
 }

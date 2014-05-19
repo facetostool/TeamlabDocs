@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.teamlabdocsapp.app.MainActivity2" >
+    tools:context="com.example.teamlabdocsapp.app.ContentListActivity" >
     
     <item android:id="@+id/logout_settings"
         android:title="@string/logout_settings"

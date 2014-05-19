@@ -10,8 +10,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.teamlabdocsapp.app.InfoActivity;
 import com.example.teamlabdocsapp.app.api.TeamlabRespose.TeamlabFolderResponse;
+import com.example.teamlabdocsapp.app.api.TeamlabRespose.TeamlabResponseFileItem;
 import com.example.teamlabdocsapp.app.listnerers.OnDocumentsListener;
+import com.example.teamlabdocsapp.app.listnerers.OnInfoListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,7 +29,8 @@ public class TeamlabAPIDocuments {
     private String token;
     private String FILE_API_PATH = "/files/";
 
-    private OnDocumentsListener mListener;
+    private OnDocumentsListener docListener;
+    private OnInfoListener infoListener;
 
     public TeamlabAPIDocuments(Context context, String url, String token) {
         mQueue = Volley.newRequestQueue(context);
@@ -61,6 +65,7 @@ public class TeamlabAPIDocuments {
             @Override
             public void onResponse(JSONObject response) {
                 Log.v("OPERATION", "GET JSON RESPONSE");
+                Log.v("RESPONSE", response.toString());
                 TeamlabFolderResponse responseObj = null;
                 try {
                     responseObj = TeamlabFolderResponse.createTeamlabFolderResponse(response);
@@ -68,13 +73,13 @@ public class TeamlabAPIDocuments {
                     Log.v("WRONG RESPONSE", response.toString());
                     e.printStackTrace();
                 }
-                mListener.onDocumentsListener(responseObj);
+                docListener.onDocumentsListener(responseObj);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.v("Error", error.getMessage());
-                mListener.onDocumentsListener(null);
+                docListener.onDocumentsListener(null);
             }
         }) {
             @Override
@@ -106,13 +111,13 @@ public class TeamlabAPIDocuments {
             @Override
             public void onResponse(JSONObject response) {
                 Log.v("Response", response.toString());
- //               mListener.onDocumentsListener(responseObj);
+ //               docListener.onDocumentsListener(responseObj);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.v("Error", error.getMessage());
-//                mListener.onDocumentsListener(null);
+//                docListener.onDocumentsListener(null);
             }
         }) {
             @Override
@@ -142,13 +147,13 @@ public class TeamlabAPIDocuments {
             @Override
             public void onResponse(JSONObject response) {
                 Log.v("Response", response.toString());
-                //               mListener.onDocumentsListener(responseObj);
+                //               docListener.onDocumentsListener(responseObj);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.v("Error", error.getMessage());
-//                mListener.onDocumentsListener(null);
+//                docListener.onDocumentsListener(null);
             }
         }) {
             @Override
@@ -162,8 +167,16 @@ public class TeamlabAPIDocuments {
         mQueue.add(jsonObjectRequest);
     }
 
-    public void getFileInformation(String fileId) {
-        getInformationRequest("file/" + fileId);
+    public void getItemInformation(int itemType, String itemId) {
+        switch (itemType) {
+            case InfoActivity.FILE_INT:
+                getInformationRequest("file/" + itemId);
+                break;
+            case InfoActivity.FOLDER_INT:
+                getInformationRequest("folder/" + itemId);
+                break;
+        }
+
     }
 
     public void getInformationRequest(String specialUrl) {
@@ -172,13 +185,20 @@ public class TeamlabAPIDocuments {
             @Override
             public void onResponse(JSONObject response) {
                 Log.v("Response", response.toString());
-                //               mListener.onDocumentsListener(responseObj);
+                TeamlabResponseFileItem fileItem = null;
+                try {
+                    JSONObject infoJson = response.getJSONObject("response");
+                    fileItem = TeamlabFolderResponse.parseFile(infoJson);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                infoListener.onInfoListener(fileItem);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.v("Error", error.getMessage());
-//                mListener.onDocumentsListener(null);
+//                docListener.onDocumentsListener(null);
             }
         }) {
             @Override
@@ -193,7 +213,11 @@ public class TeamlabAPIDocuments {
     }
 
     public void setDocumentsListener(OnDocumentsListener listener) {
-        mListener = listener;
+        docListener = listener;
+    }
+
+    public void setInfoListener(OnInfoListener listener) {
+        infoListener = listener;
     }
 
 }

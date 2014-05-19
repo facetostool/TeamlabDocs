@@ -84,35 +84,39 @@ public class TeamlabFolderResponse {
         ArrayList<TeamlabResponseFileItem> files = new ArrayList<TeamlabResponseFileItem>();
         for (int i = 0; i < filesJSON.length(); i++) {
             JSONObject fileJSON = filesJSON.getJSONObject(i);
-
-            String id = fileJSON.getString("id");
-            int folderId = Integer.parseInt(fileJSON.getString("folderId"));
-            int version = Integer.parseInt(fileJSON.getString("version"));
-            int versionGroup = Integer.parseInt(fileJSON.getString("versionGroup"));
-            String contentLength = fileJSON.getString("contentLength");
-            int fileStatus = Integer.parseInt(fileJSON.getString("fileStatus"));
-            String fileExst = fileJSON.getString("fileExst");
-            String title = fileJSON.getString("title");
-            int access = Integer.parseInt(fileJSON.getString("access"));
-            boolean sharedByMe = Boolean.parseBoolean(fileJSON.getString("sharedByMe"));
-            String updatedTime = fileJSON.getString("updated");
-            String createdTime = fileJSON.getString("created");
-            String updatedBy;
-            try {
-                JSONObject updatedByJSON = fileJSON.getJSONObject("updatedBy");
-                updatedBy = updatedByJSON.getString("displayName");
-            } catch (JSONException e) {
-                updatedBy = null;
-            }
-            JSONObject createdByJSON = fileJSON.getJSONObject("createdBy");
-            String createdBy = createdByJSON.getString("displayName");
-
-            TeamlabResponseFileItem file = new TeamlabResponseFileItem(id, folderId, version, versionGroup,
-                    contentLength, fileStatus, fileExst, title, access, sharedByMe, updatedBy, createdBy,
-                    updatedTime, createdTime);
-            files.add(file);
+            files.add(parseFile(fileJSON));
         }
         return files;
+    }
+
+    public static TeamlabResponseFileItem parseFile(JSONObject fileJSON) throws JSONException {
+        String id = fileJSON.getString("id");
+        int folderId = Integer.parseInt(fileJSON.getString("folderId"));
+        int version = Integer.parseInt(fileJSON.getString("version"));
+        int versionGroup = Integer.parseInt(fileJSON.getString("versionGroup"));
+        String contentLength = fileJSON.getString("contentLength");
+        int fileStatus = Integer.parseInt(fileJSON.getString("fileStatus"));
+        String fileExst = fileJSON.getString("fileExst");
+        String title = fileJSON.getString("title");
+        int access = Integer.parseInt(fileJSON.getString("access"));
+        boolean sharedByMe = Boolean.parseBoolean(fileJSON.getString("sharedByMe"));
+        String updatedTime = fileJSON.getString("updated");
+        String createdTime = fileJSON.getString("created");
+        String updatedBy;
+        try {
+            JSONObject updatedByJSON = fileJSON.getJSONObject("updatedBy");
+            updatedBy = updatedByJSON.getString("displayName");
+        } catch (JSONException e) {
+            updatedBy = null;
+        }
+        JSONObject createdByJSON = fileJSON.getJSONObject("createdBy");
+        String createdBy = createdByJSON.getString("displayName");
+
+        TeamlabResponseFileItem file = new TeamlabResponseFileItem(id, folderId, version, versionGroup,
+                contentLength, fileStatus, fileExst, title, access, sharedByMe, updatedBy, createdBy,
+                updatedTime, createdTime);
+
+        return file;
     }
 
     public int getSize() {

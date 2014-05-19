@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -132,9 +133,6 @@ public class MainActivity extends Activity {
         switch (id){
             case R.id.logout_settings:
                 session.logoutUser();
-            case R.id.home:
-                Log.v("KEY PRESS", "HOME");
-                backOnPreviouslyFragment();
         }
 
         return super.onOptionsItemSelected(item);
@@ -163,31 +161,20 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed(){
-        if (!backOnPreviouslyFragment()) {
-            super.onBackPressed();
+        finish();
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            reloadActivity();
         }
     }
 
-    public boolean backOnPreviouslyFragment() {
-        FragmentManager fm = getFragmentManager();
-        if (fm.getBackStackEntryCount() > 0) {
-            fm.popBackStack();
-            removeCurrentFragment();
-            return true;
-        }
-        return false;
-    }
-
-    public void removeCurrentFragment()
-    {
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        Fragment currentFrag =  getFragmentManager().findFragmentByTag(getString(R.string.fragment_tag));
-
-        if (currentFrag != null)
-            transaction.remove(currentFrag);
-
-        transaction.commit();
-
+    public void reloadActivity() {
+        finish();
+        startActivity(getIntent());
     }
 }
 

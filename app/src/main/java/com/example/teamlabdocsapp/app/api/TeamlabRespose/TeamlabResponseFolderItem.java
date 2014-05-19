@@ -1,5 +1,7 @@
 package com.example.teamlabdocsapp.app.api.TeamlabRespose;
 
+import com.example.teamlabdocsapp.app.api.helpers.TimeConvertHelper;
+
 public class TeamlabResponseFolderItem implements TeamlabResponseItem{
     public String id;
     public int parentId;
@@ -27,13 +29,20 @@ public class TeamlabResponseFolderItem implements TeamlabResponseItem{
         this.sharedByMe = sharedByMe;
         this.updatedBy = updatedBy;
         this.createdBy = createdBy;
-        this.updatedTime = updatedTime;
-        this.createdTime = createdTime;
+        this.updatedTime = TimeConvertHelper.convertTime(updatedTime);
+        this.createdTime = TimeConvertHelper.convertTime(createdTime);
     }
 
     @Override
     public String getInfo(){
-        return "folder";
+        String info = "";
+//        if (updatedBy == null) {
+        info = createdBy + " | Created: " + createdTime + " | " + "Folders: " + foldersCounts
+        + " | " + "Files: " + fileCounts;
+//        } else {
+//            info = updatedBy + " | Обновлён: " + updatedTime + " | " + contentLength;
+//        }
+        return info;
     }
 
     @Override

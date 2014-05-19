@@ -62,12 +62,15 @@ public class ContentAdapter extends BaseAdapter {
         tvName = (TextView) view.findViewById(R.id.tvName);
         textDesc = (TextView) view.findViewById(R.id.textDesc);
 
+        final int type;
         if (i instanceof TeamlabResponseFolderItem) {
             TeamlabResponseFolderItem folder = ((TeamlabResponseFolderItem) i);
 
             imageView.setImageResource(R.drawable.folder);
             tvName.setText(folder.title);
             textDesc.setText(folder.getInfo());
+
+            type = InfoActivity.FOLDER_INT;
         } else {
             TeamlabResponseFileItem file = ((TeamlabResponseFileItem) i);
             if (file.type.equals(TeamlabResponseFileItem.SPREADSHEET)) {
@@ -80,23 +83,24 @@ public class ContentAdapter extends BaseAdapter {
 
             tvName.setText(file.title);
             textDesc.setText(file.getInfo());
+
+            type = InfoActivity.FILE_INT;
         }
         ImageView iv = (ImageView) view.findViewById(R.id.ivInfo);
         iv.setTag(i.getId());
-        iv.setOnClickListener(infoClickListener);
+        iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String itemId = (String) view.getTag();
+                Intent i=new Intent(ctx, InfoActivity.class);
+                i.putExtra(InfoActivity.ID, itemId);
+                i.putExtra(InfoActivity.ITEM_TYPE, type);
+                ((Activity) ctx).startActivityForResult(i, 1);
+//                ((Activity) ctx).overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_left);
+                Toast.makeText(ctx, "Info click", Toast.LENGTH_SHORT).show();
+            }
+        });
         return view;
     }
-
-    View.OnClickListener infoClickListener = (new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            String itemId = (String) view.getTag();
-            Intent i=new Intent(ctx, InfoActivity.class);
-            i.putExtra(InfoActivity.ID, itemId);
-            ((Activity) ctx).startActivityForResult(i, 1);
-            ((Activity) ctx).overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_left);
-            Toast.makeText(ctx, "Info click", Toast.LENGTH_SHORT).show();
-        }
-    });
 
 }

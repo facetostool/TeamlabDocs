@@ -3,21 +3,17 @@ package com.example.teamlabdocsapp.app;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -27,9 +23,7 @@ import com.example.teamlabdocsapp.app.adapters.ContentAdapter;
 import com.example.teamlabdocsapp.app.api.TeamlabAPI;
 import com.example.teamlabdocsapp.app.api.TeamlabAPIDocuments;
 import com.example.teamlabdocsapp.app.api.TeamlabRespose.TeamlabFolderResponse;
-import com.example.teamlabdocsapp.app.api.TeamlabRespose.TeamlabResponseFileItem;
 import com.example.teamlabdocsapp.app.api.TeamlabRespose.TeamlabResponseFolderItem;
-import com.example.teamlabdocsapp.app.api.TeamlabRespose.TeamlabResponseItem;
 import com.example.teamlabdocsapp.app.listnerers.OnDocumentsListener;
 
 import java.util.HashMap;
@@ -131,6 +125,8 @@ public class ContentViewer extends Fragment implements OnDocumentsListener {
                 if (item instanceof TeamlabResponseFolderItem) {
                     Intent i=new Intent(context, ContentListActivity.class);
                     i.putExtra(ContentListActivity.FOLDER_ID, ((TeamlabResponseFolderItem) item).id);
+                    i.putExtra(ContentListActivity.TITLE, ((TeamlabResponseFolderItem) item).getTitle());
+                    i.putExtra(ContentListActivity.TITLE, ((TeamlabResponseFolderItem) item).getTitle());
                     ((Activity) context).startActivityForResult(i, 1);
                     ((Activity) context).overridePendingTransition( R.anim.slide_in_left, R.anim.slide_out_left);
 //                    Fragment fragment = new ContentViewer(context);
@@ -150,7 +146,6 @@ public class ContentViewer extends Fragment implements OnDocumentsListener {
                 }
             }
         });
-        registerForContextMenu(lvMain);
 
         Log.v("OPERATION", "END");
     }
@@ -166,60 +161,6 @@ public class ContentViewer extends Fragment implements OnDocumentsListener {
                 menu.add(0, MENU_RENAME, 0, R.string.context_rename_opt);
                 break;
         }
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem menuItem) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-        Object item = lvMain.getAdapter().getItem(info.position);
-        final TeamlabResponseItem selectedItem = (TeamlabResponseItem) item;
-        switch (menuItem.getItemId()) {
-            case MENU_DELETE:
-                new AlertDialog.Builder(context)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle(R.string.confirm_delete_title)
-                        .setMessage(getString(R.string.confirm_delete_message) + selectedItem.getTitle() + " ?")
-                        .setPositiveButton(R.string.confirm_delete_yes, new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (selectedItem instanceof TeamlabResponseFolderItem) {
-                                    documentsAPI.deleteFolder(selectedItem.getId());
-                                } else if (selectedItem instanceof TeamlabResponseFileItem) {
-                                    documentsAPI.deleteFile(selectedItem.getId());
-                                }
-                                reloadFragment();
-                            }
-
-                        })
-                        .setNegativeButton(R.string.confirm_delete_no, null)
-                        .show();
-                break;
-            case MENU_RENAME:
-                LayoutInflater factory = LayoutInflater.from(context);
-                final View textEntryView = factory.inflate(R.layout.rename_dialog, null);
-                new AlertDialog.Builder(context)
-                        .setIcon(android.R.drawable.ic_dialog_info)
-                        .setTitle(R.string.rename_title)
-                        .setView(textEntryView)
-                        .setPositiveButton(R.string.rename_ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                String newName = ((EditText) textEntryView.
-                                        findViewById(R.id.editText)).getText().toString();
-                                //TODO CHECK CLEAR FIELD
-                                if (selectedItem instanceof TeamlabResponseFolderItem) {
-                                    documentsAPI.renameFolder(selectedItem.getId(), newName);
-                                } else if (selectedItem instanceof TeamlabResponseFileItem) {
-                                    documentsAPI.renameFile(selectedItem.getId(), newName);
-                                }
-                                reloadFragment();
-                            }
-                        })
-                        .setNegativeButton(R.string.rename_cancel, null)
-                        .show();
-                break;
-        }
-        return super.onContextItemSelected(menuItem);
     }
 
     private void reloadFragment() {
